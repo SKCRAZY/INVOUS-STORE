@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>تسجيل الدخول</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+    <div class="hero">
+
+    <div class="logo">
+      <img src="logo.png" alt="INVOU S">
+    </div>
+
+ <div class="order-container">
+  <div class="order-box">
+    <h2>تسجيل الدخول</h2>
+
+    <input type="text" id="username" placeholder="اسم المستخدم"><br><br>
+    <input type="password" id="password" placeholder="كلمة المرور"><br><br>
+
+    <button onclick="login()">دخول</button>
+    <p id="error" style="color:red;"></p>
+  </div>
+</div>
+
+<script>
+  function login() {
+    const user = document.getElementById("username").value;
+    const pass = document.getElementById("password").value;
+
+    // تعديل الرسائل الخطأ
+    let errorMessage = "";
+
+    if (user === "BOBOCHOP" && pass === "260433") {
+      localStorage.setItem("loggedIn", "true");
+      window.location.href = "admin.html";
+    } else {
+      if (user !== "BOBOCHOP") {
+        errorMessage = "اسم المستخدم غير صحيح.";
+      } else if (pass !== "260433") {
+        errorMessage = "كلمة المرور غير صحيحة.";
+      }
+      document.getElementById("error").innerText = errorMessage;
+    }
+  }
+</script>
+
+</body>
+</html>

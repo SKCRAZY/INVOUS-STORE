@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة الإدارة</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+<div class="hero">
+
+  <div class="logo">
+    <img src="logo.png">
+  </div>
+ <script>
+   if (localStorage.getItem("loggedIn") !== "true") {
+     window.location.href = "login.html";
+   }
+ </script>
+  <button onclick="logout()">تسجيل الخروج</button>
+
+<script>
+  function logout() {
+    localStorage.removeItem("loggedIn");
+    window.location.href = "login.html";
+  }
+</script>
+  <div class="content">
+    <h1>الطلبات</h1>
+    <div id="orders"></div>
+    <button onclick="clearOrders()">حذف الكل</button>
+  </div>
+ <h2>إضافة منتج</h2>
+
+ <form onsubmit="addProduct(event)">
+  <input type="text" id="pname" placeholder="اسم المنتج" required><br><br>
+  <input type="number" id="pprice" placeholder="الثمن (DH)" required><br><br>
+  <input type="file" id="pimage" accept="image/*"><br><br>
+  <button onclick="addProduct()">إضافة المنتج</button>
+ </form>
+ <h3>المنتجات</h3>
+ <div id="products"></div>
+
+
+ </div>
+ 
+ <script>
+  const orders = JSON.parse(localStorage.getItem("orders")) || [];
+  const div = document.getElementById("orders");
+
+  if (orders.length === 0) {
+    div.innerHTML = "<p>لا توجد طلبات</p>";
+  } else {
+    orders.forEach(o => {
+      div.innerHTML += `
+        <div class="product">
+          <p>المنتج: ${o.product}</p>
+          <p>الاسم: ${o.name}</p>
+          <p>الهاتف: ${o.phone}</p>
+          <p>العنوان: ${o.address}</p>
+        </div>
+      `;
+    });
+  }
+
+  function clearOrders() {
+    localStorage.removeItem("orders");
+    location.reload();
+  }
+ </script>
+
+
+ <script>
+  function loadProducts() {
+    const products = JSON.parse(localStorage.getItem("products")) || [];
+    const div = document.getElementById("products");
+    div.innerHTML = "";
+
+    if (products.length === 0) {
+      div.innerHTML = "<p>لا توجد منتجات</p>";
+      return;
+    }
+
+    products.forEach((p, index) => {
+      div.innerHTML += `
+        <div>
+          <p>${p.name} - ${p.price} DH</p>
+          <img src="${p.image}" width="80">
+          <br>
+          <button onclick="deleteProduct(${index})">حذف</button>
+        </div>
+        <hr>
+      `;
+    });
+  }
+
+  function deleteProduct(index) {
+    let products = JSON.parse(localStorage.getItem("products")) || [];
+    products.splice(index, 1);
+    localStorage.setItem("products", JSON.stringify(products));
+    loadProducts();
+  }
+
+  loadProducts();
+</script>
+<script>
+function addProduct(e) {
+  e.preventDefault();
+
+  const name = document.getElementById("pname").value;
+  const price = document.getElementById("pprice").value;
+  const imageInput = document.getElementById("pimage");
+  const file = imageInput.files[0];
+
+  if (!file) {
+    alert("اختار صورة");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function () {
+    const product = {
+      name: name,
+      price: price,
+      image: reader.result
+    };
+
+    let products = JSON.parse(localStorage.getItem("products")) || [];
+    products.push(product);
+    localStorage.setItem("products", JSON.stringify(products));
+
+    alert("تمت إضافة المنتج بنجاح");
+    e.target.reset();
+  };
+
+  reader.readAsDataURL(file);
+}
+</script>
+</body>
+</html>

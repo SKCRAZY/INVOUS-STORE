@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>INVOU S | متجر الملابس</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <div class="hero">
+
+    <div class="logo">
+      <img src="logo.png" alt="INVOU S">
+    </div>
+
+    <div class="content">
+      <h1>WELLCOME TO INVOUS STORE</h1>
+
+     <div id="products"></div>
+    </div>
+
+  </div>
+
+  <script>
+    function buy(product) {
+      localStorage.setItem("product", product);
+      window.location.href = "order.html";
+    }
+  </script>
+ <script>
+ let products = JSON.parse(localStorage.getItem("products")) || [];
+ const container = document.getElementById("products");
+
+ if (products.length === 0) {
+  container.innerHTML = "<p>لا توجد منتجات</p>";
+ } else {
+  products.forEach(p => {
+    container.innerHTML += `
+      <div class="product">
+        <img src="${p.image}" alt="">
+        <h3>${p.name}</h3>
+        <p>${p.price} DH</p>
+        <button onclick="orderProduct(&quot;${p.name}&quot;)">طلب</button>
+      </div>
+    `;
+  });
+ }
+
+ function orderProduct(name) {
+  localStorage.setItem("product", name);
+  window.location.href = "order.html";
+ }
+</script>
+</body>
+</html>

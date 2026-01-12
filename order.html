@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>طلب المنتج</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+<div class="hero">
+
+  <div class="logo">
+    <img src="logo.png">
+  </div>
+ 
+ <div class="order-container">
+  <div class="order-box">
+    <h1>تأكيد الطلب</h1>
+    <p id="productName"></p>
+
+    <form onsubmit="sendOrder(event)">
+      <input type="text" id="name" placeholder="الاسم الكامل" required><br><br>
+      <input type="text" id="phone" placeholder="رقم الهاتف" required><br><br>
+      <input type="text" id="address" placeholder="العنوان" required><br><br>
+      <button type="submit">تأكيد الطلب</button>
+    </form>
+  </div>
+ </div>
+</div>
+
+<script>
+  const product = localStorage.getItem("product");
+
+  function sendOrder(e) {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const phone = document.getElementById("phone").value;
+    const address = document.getElementById("address").value;
+
+    const order = {
+      product: product,
+      name: name,
+      phone: phone,
+      address: address
+    };
+
+    let orders = JSON.parse(localStorage.getItem("orders")) || [];
+    orders.push(order);
+    localStorage.setItem("orders", JSON.stringify(orders));
+
+     alert("✅تم إرسال الطلب بنجاح");
+    window.location.href = "index.html";
+  }
+</script>
+
+</body>
+</html>
